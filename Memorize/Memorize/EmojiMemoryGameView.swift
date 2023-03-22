@@ -11,16 +11,12 @@ struct EmojiMemoryGameView: View {
     @ObservedObject var game: EmojiMemoryGame
     
     var body: some View {
-        ScrollView {
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 65))]) {
-                ForEach(game.cards) { card in
-                    CardView(card: card)
-                        .aspectRatio(2/3, contentMode: .fit)
-                        .onTapGesture {
-                            game.choose(card)
-                        }
+        AspectVGrid(items: game.cards, aspectRatio: 2/3) { card in
+            CardView(card: card)
+                .padding(4)
+                .onTapGesture {
+                    game.choose(card)
                 }
-            }
         }
         .foregroundColor(.red)
         .padding(.horizontal)
@@ -42,6 +38,9 @@ struct CardView: View {
                         .foregroundColor(.white)
                     shape
                         .strokeBorder(lineWidth: DrawingConstants.lineWidth)
+                    Pie(startAngle: Angle(degrees: 0-90), endAngle: Angle(degrees: 110-90))
+                        .padding(DrawingConstants.circlePadding)
+                        .opacity(DrawingConstants.circleOpacity)
                     Text(card.content)
                         .font(font(in: geometry.size))
                 }
@@ -61,9 +60,11 @@ struct CardView: View {
     }
     
     private struct DrawingConstants {
-        static let cornerRadius: CGFloat = 20
+        static let cornerRadius: CGFloat = 10
         static let lineWidth: CGFloat = 3
-        static let fontScale: CGFloat = 0.8
+        static let fontScale: CGFloat = 0.65
+        static let circlePadding: CGFloat = 5
+        static let circleOpacity: CGFloat = 0.5
     }
 }
 
@@ -71,12 +72,13 @@ struct CardView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         let game = EmojiMemoryGame()
+        game.choose(game.cards.first!)
         
-        EmojiMemoryGameView(game: game)
+        return EmojiMemoryGameView(game: game)
             .previewDisplayName("Dark")
             .preferredColorScheme(.dark)
-        EmojiMemoryGameView(game: game)
-            .previewDisplayName("Light")
-            .preferredColorScheme(.light)
+//        EmojiMemoryGameView(game: game)
+//            .previewDisplayName("Light")
+//            .preferredColorScheme(.light)
     }
 }
