@@ -59,6 +59,8 @@ private func widthThatFits(itemCount: Int, in size: CGSize, itemAspectRatio: CGF
     return floor(size.width / CGFloat(columnCount))
 }
 
+
+
 //struct AspectVGrid_Previews: PreviewProvider {
 //    static var previews: some View {
 //        AspectVGrid()
